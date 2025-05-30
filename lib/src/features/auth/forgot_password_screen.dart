@@ -11,49 +11,64 @@ class ForgotPasswordScreen extends StatefulWidget {
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   final TextEditingController _emailController = TextEditingController();
   bool _loading = false;
+  String? _emailError;
 
-  Future<void> _resetPassword() async {
-    setState(() => _loading = true);
+  bool _isValidEmail(String email) {
+    final emailRegExp = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+    return emailRegExp.hasMatch(email);
+  }
+
+  Future<void> _sendPasswordResetEmail() async {
+    setState(() {
+      _loading = true;
+      _emailError = null;
+    });
 
     final email = _emailController.text.trim();
 
+    // Validación visual del campo
     if (email.isEmpty) {
-      _showSnackBar("Por favor ingresa tu correo electrónico", color: Colors.orange, icon: Icons.info);
-      setState(() => _loading = false);
+      setState(() {
+        _emailError = "El correo es requerido";
+        _loading = false;
+      });
+      return;
+    } else if (!_isValidEmail(email)) {
+      setState(() {
+        _emailError = "Formato de correo inválido";
+        _loading = false;
+      });
       return;
     }
 
     try {
       await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
       _showSnackBar(
-        "Se envió un correo para restablecer la contraseña.",
+        "Se ha enviado el enlace para restablecer la contraseña a tu correo.",
         color: Colors.green,
         icon: Icons.check_circle,
       );
-      // Opcional: regresar al login después de unos segundos
-      await Future.delayed(const Duration(seconds: 2));
-      Navigator.pop(context);
+      // Puedes navegar atrás si quieres, después de un breve tiempo:
+      // Future.delayed(const Duration(seconds: 2), () => Navigator.pop(context));
     } on FirebaseAuthException catch (e) {
       String message = '';
       IconData icon = Icons.error;
 
       switch (e.code) {
         case 'user-not-found':
-          message = 'No existe un usuario con ese correo.';
-          icon = Icons.person_off;
+          message = "No existe una cuenta con este correo.";
+          setState(() => _emailError = "No existe una cuenta con este correo.");
           break;
         case 'invalid-email':
-          message = 'Correo electrónico inválido.';
-          icon = Icons.alternate_email;
+          message = "Correo electrónico inválido.";
+          setState(() => _emailError = "Correo electrónico inválido");
           break;
         default:
-          message = 'Error: ${e.message ?? "Desconocido"}';
-          icon = Icons.error_outline;
+          message = "Error: ${e.message ?? "Desconocido"}";
       }
-
       _showSnackBar(message, color: Colors.red, icon: icon);
     } catch (e) {
-      _showSnackBar('Error inesperado', color: Colors.red, icon: Icons.error);
+      _showSnackBar("Error inesperado", color: Colors.red, icon: Icons.error);
     } finally {
       setState(() => _loading = false);
     }
@@ -92,17 +107,21 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               TextField(
                 controller: _emailController,
                 keyboardType: TextInputType.emailAddress,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   labelText: 'Correo electrónico',
-                  prefixIcon: Icon(Icons.email),
-                  border: OutlineInputBorder(),
+                  prefixIcon: const Icon(Icons.email),
+                  border: const OutlineInputBorder(),
+                  errorText: _emailError,
                 ),
+                onChanged: (value) {
+                  if (_emailError != null) setState(() => _emailError = null);
+                },
               ),
               const SizedBox(height: 32),
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: _loading ? null : _resetPassword,
+                  onPressed: _loading ? null : _sendPasswordResetEmail,
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 16),
                   ),
@@ -111,13 +130,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                           width: 24, height: 24,
                           child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
                         )
-                      : const Text('Enviar instrucciones', style: TextStyle(fontSize: 18)),
+                      : const Text('Enviar enlace', style: TextStyle(fontSize: 18)),
                 ),
-              ),
-              const SizedBox(height: 16),
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text("Volver al inicio de sesión"),
               ),
             ],
           ),

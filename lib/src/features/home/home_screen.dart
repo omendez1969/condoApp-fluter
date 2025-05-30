@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'inicio_screen.dart';
+import 'avisos_screen.dart';
+import 'reservas_screen.dart';
+import 'ajustes_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -11,18 +15,16 @@ class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  // Nombres e íconos para el BottomNavigationBar
-  static const List<Widget> _pages = [
-    Center(child: Text('Inicio', style: TextStyle(fontSize: 28))),
-    Center(child: Text('Avisos', style: TextStyle(fontSize: 28))),
-    Center(child: Text('Reservas', style: TextStyle(fontSize: 28))),
-    // El menú no muestra contenido, solo abre el Drawer
+  // Pantallas reales para cada sección:
+  static final List<Widget> _pages = [
+    InicioScreen(),
+    AvisosScreen(),
+    ReservasScreen(),
     Center(child: Text('Menú', style: TextStyle(fontSize: 28))),
   ];
 
   void _onItemTapped(int index) {
     if (index == 3) {
-      // Abre el Drawer al pulsar el ícono de menú
       _scaffoldKey.currentState?.openEndDrawer();
     } else {
       setState(() {
@@ -41,55 +43,63 @@ class _HomeScreenState extends State<HomeScreen> {
       endDrawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
-          children: const [
-            DrawerHeader(
+          children: [
+            const DrawerHeader(
               decoration: BoxDecoration(
                 color: Colors.teal,
               ),
               child: Text('Opciones', style: TextStyle(color: Colors.white, fontSize: 22)),
             ),
-            ListTile(
+            const ListTile(
               leading: Icon(Icons.pool),
               title: Text('Config. Amenidades'),
             ),
-            ListTile(
+            const ListTile(
               leading: Icon(Icons.report_problem),
               title: Text('Incidencias'),
             ),
-            ListTile(
+            const ListTile(
               leading: Icon(Icons.person),
               title: Text('Perfil'),
             ),
-            ListTile(
+            const ListTile(
               leading: Icon(Icons.how_to_vote),
               title: Text('Votaciones'),
             ),
-            ListTile(
+            const ListTile(
               leading: Icon(Icons.payment),
               title: Text('Pagos'),
             ),
-            ListTile(
+            const ListTile(
               leading: Icon(Icons.local_shipping),
               title: Text('Paquetería'),
             ),
-            ListTile(
+            const ListTile(
               leading: Icon(Icons.group),
               title: Text('Visitas'),
             ),
-            ListTile(
+            const ListTile(
               leading: Icon(Icons.folder),
               title: Text('Documentos'),
             ),
+            // <--- AJUSTES NO ES CONST, porque tiene lógica --->
             ListTile(
-              leading: Icon(Icons.settings),
-              title: Text('Ajustes'),
+              leading: const Icon(Icons.settings),
+              title: const Text('Ajustes'),
+              onTap: () {
+                Navigator.pop(context); // Cierra el Drawer
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const AjustesScreen()),
+                );
+              },
             ),
           ],
         ),
       ),
       body: _pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex == 3 ? 0 : _selectedIndex, // No resalta el menú
+        currentIndex: _selectedIndex == 3 ? 0 : _selectedIndex,
         onTap: _onItemTapped,
         type: BottomNavigationBarType.fixed,
         items: const [
