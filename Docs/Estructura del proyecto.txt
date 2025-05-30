@@ -1,17 +1,51 @@
-/lib
-  /src
-    /core            # Cosas globales: temas, utilidades, constantes, servicios generales
-      theme/
-      utils/
-      constants.dart
-    /features        # Una carpeta por cada "módulo" o pantalla importante de la app
-      /auth
-        login_screen.dart
-        signup_screen.dart
-        auth_service.dart
-      /home
-        home_screen.dart
-    /widgets         # Widgets reutilizables, genéricos, usados en varias partes
-      custom_button.dart
-      logo_widget.dart
-    main.dart        # Punto de entrada de la app
+Miapp/
+│
+├── lib/
+│   ├── l10n/                         # Archivos ARB de traducción
+│   │   ├── app_en.arb
+│   │   └── app_es.arb
+│   │
+│   ├── src/
+│   │   ├── core/
+│   │   │   ├── l10n/                 # Configuración/utilidades de localización
+│   │   │   │   └── l10n.dart
+│   │   │   ├── theme/                # Temas globales (theme_data.dart, etc.)
+│   │   │   ├── utils/                # Funciones/utilidades generales
+│   │   │   └── constants.dart        # Constantes globales
+│   │   │
+│   │   ├── features/                 # Cada carpeta = módulo o pantalla
+│   │   │   ├── auth/
+│   │   │   │   ├── login_screen.dart
+│   │   │   │   ├── signup_screen.dart
+│   │   │   │   └── auth_service.dart
+│   │   │   ├── home/
+│   │   │   │   └── home_screen.dart
+│   │   │   ├── notices/
+│   │   │   ├── reservations/
+│   │   │   └── ...                   # Otros módulos
+│   │   │
+│   │   └── widgets/                  # Widgets reutilizables y genéricos
+│   │       ├── custom_button.dart
+│   │       └── logo_widget.dart
+│   │
+│   └── main.dart                     # Punto de entrada principal
+│
+├── assets/
+│   ├── icons/
+│   │   ├── google_light.svg
+│   │   ├── google_dark.svg
+│   │   ├── apple_light.svg
+│   │   ├── apple_dark.svg
+│   │   ├── btn_google_signin_dark_normal_web.png
+│   │   └── btn_google_signin_light_normal_web.png
+│   │
+│   ├── images/                       # Imágenes generales (logos, backgrounds, etc.)
+│   │   └── ... 
+│   │
+│   └── lottie/                       # Animaciones Lottie si usas alguna
+│
+├── test/                             # Pruebas unitarias y de widget
+│   └── ... 
+│
+├── pubspec.yaml                      # Configuración de dependencias y assets
+└── README.md

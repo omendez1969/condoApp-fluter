@@ -1,0 +1,54 @@
+{
+    "@_COMMON": {
+        "description": "Textos comunes en la aplicación"
+    },
+    "language": "Idioma",
+    "spanish": "Español",
+    "english": "Inglés",
+    "settings": "Ajustes",
+    "theme": "Tema",
+    "darkMode": "Modo oscuro",
+    "lightMode": "Modo claro",
+    "systemTheme": "Tema del sistema",
+    "restartRequired": "Reinicio requerido",
+    "restartMessage": "Por favor, reinicia la aplicación para aplicar el cambio de idioma",
+    "logout": "Cerrar sesión",
+    "logoutConfirmTitle": "¿Cerrar sesión?",
+    "logoutConfirmMessage": "¿Estás seguro que deseas cerrar la sesión?",
+    "cancel": "Cancelar",
+    "confirm": "Confirmar",
+    "comingSoon": "Disponible próximamente",
+    "signInWith": "Iniciar sesión con {provider}",
+    "@signInWith": {
+        "description": "Texto para botones de inicio de sesión con proveedores",
+        "placeholders": {
+            "provider": {
+                "type": "String",
+                "example": "Google"
+            }
+        }
+    },
+
+    "@_AUTH": {
+        "description": "Textos relacionados con autenticación"
+    },
+    "loginTitle": "Iniciar sesión",
+    "loginButton": "Iniciar sesión",
+    "createAccount": "Crear cuenta",
+    "emailLabel": "Correo electrónico",
+    "passwordLabel": "Contraseña",
+    "forgotPassword": "¿Olvidaste tu contraseña?",
+    "emailRequired": "El correo es requerido",
+    "invalidEmailFormat": "Formato de correo inválido",
+    "passwordRequired": "La contraseña es requerida",
+    "welcome": "¡Bienvenido!",
+
+    "@_FIREBASE_ERRORS": {
+        "description": "Mensajes de error de Firebase"
+    },
+    "userNotFound": "No existe una cuenta con este correo",
+    "wrongPassword": "Contraseña incorrecta",
+    "invalidEmail": "Correo electrónico inválido",
+    "tooManyRequests": "Demasiados intentos. Intenta más tarde",
+    "unexpectedError": "Error inesperado"
+} 

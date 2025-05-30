@@ -1,0 +1,54 @@
+{
+    "@_COMMON": {
+        "description": "Common texts in the application"
+    },
+    "language": "Language",
+    "spanish": "Spanish",
+    "english": "English",
+    "settings": "Settings",
+    "theme": "Theme",
+    "darkMode": "Dark mode",
+    "lightMode": "Light mode",
+    "systemTheme": "System theme",
+    "restartRequired": "Restart required",
+    "restartMessage": "Please restart the application to apply the language change",
+    "logout": "Sign out",
+    "logoutConfirmTitle": "Sign out?",
+    "logoutConfirmMessage": "Are you sure you want to sign out?",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "comingSoon": "Coming soon",
+    "signInWith": "Sign in with {provider}",
+    "@signInWith": {
+        "description": "Text for provider sign-in buttons",
+        "placeholders": {
+            "provider": {
+                "type": "String",
+                "example": "Google"
+            }
+        }
+    },
+
+    "@_AUTH": {
+        "description": "Authentication related texts"
+    },
+    "loginTitle": "Login",
+    "loginButton": "Sign in",
+    "createAccount": "Create account",
+    "emailLabel": "Email",
+    "passwordLabel": "Password",
+    "forgotPassword": "Forgot password?",
+    "emailRequired": "Email is required",
+    "invalidEmailFormat": "Invalid email format",
+    "passwordRequired": "Password is required",
+    "welcome": "Welcome!",
+
+    "@_FIREBASE_ERRORS": {
+        "description": "Firebase error messages"
+    },
+    "userNotFound": "No account exists with this email",
+    "wrongPassword": "Incorrect password",
+    "invalidEmail": "Invalid email",
+    "tooManyRequests": "Too many attempts. Try again later",
+    "unexpectedError": "Unexpected error"
+} 

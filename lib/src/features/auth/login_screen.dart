@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import '../../../l10n/app_localizations.dart';
+import '../../core/constants/social_icons.dart';
 import '../home/home_screen.dart';
 import 'register_screen.dart';
 import 'forgot_password_screen.dart';
@@ -28,6 +31,8 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> _loginWithEmailPassword() async {
+    final l10n = AppLocalizations.of(context)!;
+    
     setState(() {
       _loading = true;
       _emailError = null;
@@ -39,15 +44,15 @@ class _LoginScreenState extends State<LoginScreen> {
     final email = _emailController.text.trim();
 
     if (email.isEmpty) {
-      setState(() => _emailError = "El correo es requerido");
+      setState(() => _emailError = l10n.emailRequired);
       hasError = true;
     } else if (!_isValidEmail(email)) {
-      setState(() => _emailError = "Formato de correo inválido");
+      setState(() => _emailError = l10n.invalidEmailFormat);
       hasError = true;
     }
 
     if (_passwordController.text.isEmpty) {
-      setState(() => _passwordError = "La contraseña es requerida");
+      setState(() => _passwordError = l10n.passwordRequired);
       hasError = true;
     }
 
@@ -63,7 +68,7 @@ class _LoginScreenState extends State<LoginScreen> {
         password: _passwordController.text,
       );
       // Login exitoso
-      _showSnackBar('¡Bienvenido!', color: Colors.green, icon: Icons.check_circle);
+      _showSnackBar(l10n.welcome, color: Colors.green, icon: Icons.check_circle);
 
       // Navegar a HomeScreen reemplazando el login
       Navigator.pushReplacement(
@@ -71,37 +76,39 @@ class _LoginScreenState extends State<LoginScreen> {
         MaterialPageRoute(builder: (context) => const HomeScreen()),
       );
     } on FirebaseAuthException catch (e) {
+      final l10n = AppLocalizations.of(context)!;
       String message = '';
       IconData icon = Icons.error;
 
       switch (e.code) {
         case 'user-not-found':
-          message = 'Usuario no registrado.';
+          message = l10n.userNotFound;
           icon = Icons.person_off;
-          setState(() => _emailError = "No existe una cuenta con este correo");
+          setState(() => _emailError = l10n.userNotFound);
           break;
         case 'wrong-password':
-          message = 'Contraseña incorrecta.';
+          message = l10n.wrongPassword;
           icon = Icons.lock_open;
-          setState(() => _passwordError = "Contraseña incorrecta");
+          setState(() => _passwordError = l10n.wrongPassword);
           break;
         case 'invalid-email':
-          message = 'Correo electrónico inválido.';
+          message = l10n.invalidEmail;
           icon = Icons.alternate_email;
-          setState(() => _emailError = "Correo electrónico inválido");
+          setState(() => _emailError = l10n.invalidEmail);
           break;
         case 'too-many-requests':
-          message = 'Demasiados intentos. Intenta más tarde.';
+          message = l10n.tooManyRequests;
           icon = Icons.hourglass_empty;
           break;
         default:
-          message = 'Error: ${e.message ?? "Desconocido"}';
+          message = l10n.unexpectedError;
           icon = Icons.error_outline;
       }
 
       _showSnackBar(message, color: Colors.red, icon: icon);
     } catch (e) {
-      _showSnackBar('Error inesperado', color: Colors.red, icon: Icons.error);
+      final l10n = AppLocalizations.of(context)!;
+      _showSnackBar(l10n.unexpectedError, color: Colors.red, icon: Icons.error);
     } finally {
       setState(() => _loading = false);
     }
@@ -136,11 +143,80 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
+  Widget _buildSocialLoginButton({
+    required IconData icon,
+    required String provider,
+    Color? iconColor,
+    String? lightLogo,
+    String? darkLogo,
+    bool isSvg = false,
+  }) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final l10n = AppLocalizations.of(context)!;
+    final brightness = Theme.of(context).brightness;
+    final bool isDark = brightness == Brightness.dark;
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          width: 56,
+          height: 56,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: colorScheme.surface,
+            border: Border.all(
+              color: colorScheme.outline.withOpacity(0.3),
+              width: 1,
+            ),
+          ),
+          child: lightLogo != null && darkLogo != null
+              ? Opacity(
+                  opacity: 0.5,
+                  child: isSvg
+                      ? SvgPicture.asset(
+                          isDark ? darkLogo : lightLogo,
+                          width: 24,
+                          height: 24,
+                        )
+                      : Image.asset(
+                          isDark ? darkLogo : lightLogo,
+                          width: 24,
+                          height: 24,
+                        ),
+                )
+              : Icon(
+                  icon,
+                  size: 28,
+                  color: iconColor?.withOpacity(0.5) ?? colorScheme.outline.withOpacity(0.5),
+                ),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          l10n.signInWith(provider),
+          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+            color: colorScheme.outline.withOpacity(0.7),
+          ),
+        ),
+        Text(
+          l10n.comingSoon,
+          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+            color: colorScheme.primary.withOpacity(0.7),
+            fontStyle: FontStyle.italic,
+          ),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final colorScheme = Theme.of(context).colorScheme;
+    
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Iniciar sesión'),
+        title: Text(l10n.loginTitle),
         centerTitle: true,
       ),
       body: Center(
@@ -149,13 +225,13 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.lock, size: 64, color: Theme.of(context).colorScheme.primary),
+              Icon(Icons.lock, size: 64, color: colorScheme.primary),
               const SizedBox(height: 32),
               TextField(
                 controller: _emailController,
                 keyboardType: TextInputType.emailAddress,
                 decoration: InputDecoration(
-                  labelText: 'Correo electrónico',
+                  labelText: l10n.emailLabel,
                   prefixIcon: const Icon(Icons.email),
                   border: const OutlineInputBorder(),
                   errorText: _emailError,
@@ -171,7 +247,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 controller: _passwordController,
                 obscureText: _obscureText,
                 decoration: InputDecoration(
-                  labelText: 'Contraseña',
+                  labelText: l10n.passwordLabel,
                   prefixIcon: const Icon(Icons.lock_outline),
                   border: const OutlineInputBorder(),
                   errorText: _passwordError,
@@ -192,34 +268,56 @@ class _LoginScreenState extends State<LoginScreen> {
                   }
                 },
               ),
-              const SizedBox(height: 12),
               Align(
                 alignment: Alignment.centerRight,
                 child: TextButton(
                   onPressed: _goToForgotPassword,
-                  child: const Text("¿Olvidaste tu contraseña?"),
+                  child: Text(l10n.forgotPassword),
                 ),
               ),
-              const SizedBox(height: 8),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: _loading ? null : _loginWithEmailPassword,
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                  ),
-                  child: _loading
-                      ? const SizedBox(
-                          width: 24, height: 24,
-                          child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
-                        )
-                      : const Text('Iniciar sesión', style: TextStyle(fontSize: 18)),
-                ),
+              const SizedBox(height: 20),
+              FilledButton.icon(
+                onPressed: _loading ? null : _loginWithEmailPassword,
+                icon: _loading
+                    ? Container(
+                        width: 24,
+                        height: 24,
+                        padding: const EdgeInsets.all(2.0),
+                        child: const CircularProgressIndicator(
+                          strokeWidth: 3,
+                        ),
+                      )
+                    : const Icon(Icons.login),
+                label: Text(l10n.loginButton),
               ),
-              const SizedBox(height: 8),
               TextButton(
                 onPressed: _goToRegister,
-                child: const Text("Crear cuenta"),
+                child: Text(l10n.createAccount),
+              ),
+              const SizedBox(height: 32),
+              const Divider(),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    _buildSocialLoginButton(
+                      icon: Icons.g_mobiledata_rounded,
+                      provider: "Google",
+                      iconColor: Colors.red,
+                      lightLogo: SocialIcons.googleLight,
+                      darkLogo: SocialIcons.googleDark,
+                      isSvg: true,
+                    ),
+                    _buildSocialLoginButton(
+                      icon: Icons.apple_rounded,
+                      provider: "Apple",
+                      lightLogo: SocialIcons.appleLight,
+                      darkLogo: SocialIcons.appleDark,
+                      isSvg: false,
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
