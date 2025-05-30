@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1029425721396",
+    "project_id": "condoapp-ed446",
+    "storage_bucket": "condoapp-ed446.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1029425721396:android:37af2956fa5470f27d9a61",
+        "android_client_info": {
+          "package_name": "com.macros.condoapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB69UBexq2fI7n2OepMLYoMBz1MmBuZcyk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,17 @@
+/lib
+  /src
+    /core            # Cosas globales: temas, utilidades, constantes, servicios generales
+      theme/
+      utils/
+      constants.dart
+    /features        # Una carpeta por cada "módulo" o pantalla importante de la app
+      /auth
+        login_screen.dart
+        signup_screen.dart
+        auth_service.dart
+      /home
+        home_screen.dart
+    /widgets         # Widgets reutilizables, genéricos, usados en varias partes
+      custom_button.dart
+      logo_widget.dart
+    main.dart        # Punto de entrada de la app

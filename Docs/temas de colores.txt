@@ -1,0 +1,34 @@
+la librería flex_color_scheme en una página oficial interactiva:
+
+Página oficial de demos de esquemas de color
+FlexColorScheme Themes Playground
+
+Aquí puedes:
+
+Ver todos los temas disponibles (más de 50 esquemas).
+
+Probar cómo se ven en modo claro y oscuro.
+
+Ver el nombre de cada esquema para usarlo en tu código.
+
+Incluso copiar el código listo para usar en tu proyecto.
+
+¿Dónde verlos en pub.dev?
+También puedes ver la lista de esquemas con ejemplos en la documentación oficial de pub.dev.
+
+Ejemplo visual desde la página
+En el playground puedes probar combinaciones como:
+
+tealM3
+
+mandyRed
+
+deepBlue
+
+goldenSun
+
+wasabi
+
+outerSpace
+
+...¡y muchos más!
